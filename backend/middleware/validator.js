@@ -42,6 +42,37 @@ export const registerSchema = Joi.object({
         'any.only': 'Role must be either student or company',
         'any.required': 'Role is required',
     }),
+    // Student-specific fields
+    name: Joi.string().trim().when('role', {
+        is: 'student',
+        then: Joi.optional(),
+    }),
+    phone: Joi.string().trim().optional(),
+    university: Joi.string().trim().when('role', {
+        is: 'student',
+        then: Joi.optional(),
+    }),
+    major: Joi.string().trim().when('role', {
+        is: 'student',
+        then: Joi.optional(),
+    }),
+    graduationYear: Joi.number().min(2020).max(2035).when('role', {
+        is: 'student',
+        then: Joi.optional(),
+    }),
+    // Company-specific fields
+    companyName: Joi.string().trim().when('role', {
+        is: 'company',
+        then: Joi.optional(),
+    }),
+    website: Joi.string().uri().allow('').when('role', {
+        is: 'company',
+        then: Joi.optional(),
+    }),
+    industry: Joi.string().trim().when('role', {
+        is: 'company',
+        then: Joi.optional(),
+    }),
 });
 
 // User Login

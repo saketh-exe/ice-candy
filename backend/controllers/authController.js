@@ -10,7 +10,7 @@ import { generateAccessToken, generateRefreshToken, verifyToken } from '../utils
  * @access  Public
  */
 export const register = asyncHandler(async (req, res) => {
-    const { email, password, role } = req.body;
+    const { email, password, role, name, phone, university, major, graduationYear, companyName, website, industry } = req.body;
 
     // Check if user already exists
     const existingUser = await User.findOne({ email });
@@ -23,22 +23,42 @@ export const register = asyncHandler(async (req, res) => {
         return errorResponse(res, 400, 'Cannot register as admin');
     }
 
-    // Create user
-    const user = await User.create({
+    // Create user object with role-specific fields
+    const userData = {
         email,
         password,
         role,
-    });
+    };
+
+    // Add student-specific fields if role is student
+    if (role === 'student') {
+        userData.studentProfile = {};
+        if (name) userData.studentProfile.name = name;
+        if (phone) userData.studentProfile.phone = phone;
+        if (university) userData.studentProfile.university = university;
+        if (major) userData.studentProfile.major = major;
+        if (graduationYear) userData.studentProfile.graduationYear = graduationYear;
+    }
+
+    // Create user
+    const user = await User.create(userData);
 
     // If role is company, create company profile
     if (role === 'company') {
-        const company = await Company.create({
+        const companyData = {
             user: user._id,
-            companyName: 'Company Name', // Placeholder, to be updated
+            companyName: companyName || 'Company Name', // Use provided name or placeholder
             contactInfo: {
                 email: email,
             },
-        });
+        };
+
+        // Add optional company fields
+        if (phone) companyData.contactInfo.phone = phone;
+        if (website) companyData.website = website;
+        if (industry) companyData.industry = industry;
+
+        const company = await Company.create(companyData);
 
         user.company = company._id;
         await user.save();
