@@ -32,16 +32,19 @@ jobs:
             docker stop skillsync-backend skillsync-frontend 2>/dev/null || true
             docker rm skillsync-backend skillsync-frontend 2>/dev/null || true
 
-            # Remove old images
+            # Remove old images to force clean rebuild
             docker rmi skillsync-backend skillsync-frontend 2>/dev/null || true
+
+            # Clean Docker build cache and system
+            docker builder prune -f
 
             # Rebuild backend
             cd ~/ice-candy/backend
-            docker build -t skillsync-backend .
+            docker build --no-cache -t skillsync-backend .
 
-            # Rebuild frontend
+            # Rebuild frontend with no cache to avoid npm cache corruption
             cd ~/ice-candy/frontend
-            docker build -t skillsync-frontend .
+            docker build --no-cache -t skillsync-frontend .
 
             # Start containers
             cd ~/ice-candy
