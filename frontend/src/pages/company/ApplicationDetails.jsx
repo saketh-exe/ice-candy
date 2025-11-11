@@ -109,23 +109,26 @@ const ApplicationDetails = () => {
       // Use filename if available, otherwise extract from path
       const finalFilename = filename || filePath.split(/[\\\/]/).pop();
 
-      // Build the full URL - use the correct base URL without /api
-      const baseURL = (import.meta.env.VITE_API_BASE_URL || 'http://65.0.18.1:5000/api').replace('/api', '');
-      const downloadUrl = `${baseURL}/uploads/${finalFilename}`;
+      // Build the full URL using the new API endpoint
+      const baseURL = (import.meta.env.VITE_API_BASE_URL || 'http://65.0.18.1:5000/api');
+      const downloadUrl = `${baseURL}/files/${finalFilename}`;
 
       console.log("Final download URL:", downloadUrl);
 
-      // Use native fetch instead of axios to handle URL encoding better
+      // Use native fetch with proper headers
       const response = await fetch(downloadUrl, {
         method: "GET",
         credentials: "include",
+        headers: {
+          'Accept': 'application/pdf',
+        }
       });
 
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      // Get the blob from response
+      // Stream the response and create blob
       const blob = await response.blob();
 
       // Create a blob URL

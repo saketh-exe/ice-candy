@@ -1,6 +1,9 @@
 import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
+import path from 'path';
+import fs from 'fs';
+import { fileURLToPath } from 'url';
 import errorHandler from './middleware/errorHandler.js';
 
 // Import routes
@@ -9,6 +12,9 @@ import studentRoutes from './routes/studentRoutes.js';
 import companyRoutes from './routes/companyRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import internshipRoutes from './routes/internshipRoutes.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 
@@ -30,8 +36,61 @@ if (process.env.NODE_ENV === 'development') {
     app.use(morgan('combined'));
 }
 
-// Serve static files (uploads)
+// Serve static files (uploads) - DEPRECATED, use /api/files/:filename instead
 app.use('/uploads', express.static('uploads'));
+
+// File download endpoint with proper streaming
+app.get('/api/files/:filename', (req, res) => {
+    const filename = req.params.filename;
+    const filePath = path.join(__dirname, 'uploads', filename);
+
+    // Security: Prevent directory traversal
+    const normalizedPath = path.normalize(filePath);
+    if (!normalizedPath.startsWith(path.join(__dirname, 'uploads'))) {
+        return res.status(403).json({
+            success: false,
+            message: 'Access denied'
+        });
+    }
+
+    // Check if file exists
+    if (!fs.existsSync(filePath)) {
+        return res.status(404).json({
+            success: false,
+            message: 'File not found'
+        });
+    }
+
+    // Get file stats
+    const stat = fs.statSync(filePath);
+    const fileSize = stat.size;
+
+    // Set headers for file download
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Length', fileSize);
+    res.setHeader('Content-Disposition', `attachment; filename="${filename}"`);
+    res.setHeader('Accept-Ranges', 'bytes');
+
+    // Handle range requests for partial content (resume downloads)
+    const range = req.headers.range;
+    if (range) {
+        const parts = range.replace(/bytes=/, "").split("-");
+        const start = parseInt(parts[0], 10);
+        const end = parts[1] ? parseInt(parts[1], 10) : fileSize - 1;
+        const chunksize = (end - start) + 1;
+
+        res.status(206); // Partial Content
+        res.setHeader('Content-Range', `bytes ${start}-${end}/${fileSize}`);
+        res.setHeader('Content-Length', chunksize);
+
+        const stream = fs.createReadStream(filePath, { start, end });
+        stream.pipe(res);
+    } else {
+        // Stream the entire file
+        const stream = fs.createReadStream(filePath);
+        stream.pipe(res);
+    }
+});
 
 // Health check route
 app.get('/health', (req, res) => {
