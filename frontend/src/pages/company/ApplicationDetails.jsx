@@ -110,8 +110,7 @@ const ApplicationDetails = () => {
       const finalFilename = filename || filePath.split(/[\\\/]/).pop();
 
       // Build the full URL using the new API endpoint
-      const baseURL =
-        import.meta.env.VITE_API_BASE_URL || "http://65.0.18.1:5000/api";
+      const baseURL ="http://65.0.18.1:5000/api";
       const downloadUrl = `${baseURL}/files/${finalFilename}`;
 
       console.log("Final download URL:", downloadUrl);
