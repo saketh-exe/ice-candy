@@ -109,8 +109,8 @@ const ApplicationDetails = () => {
       // Use filename if available, otherwise extract from path
       const finalFilename = filename || filePath.split(/[\\\/]/).pop();
 
-      // Build the full URL - use window.location.origin to get the base URL
-      const baseURL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+      // Build the full URL - use the correct base URL without /api
+      const baseURL = (import.meta.env.VITE_API_BASE_URL || 'http://65.0.18.1:5000/api').replace('/api', '');
       const downloadUrl = `${baseURL}/uploads/${finalFilename}`;
 
       console.log("Final download URL:", downloadUrl);
