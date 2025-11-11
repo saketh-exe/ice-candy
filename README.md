@@ -105,6 +105,8 @@ iceCandy/
 - [Backend API Documentation](./backend/API_DOCS.md) - API endpoints reference
 - [Backend Quick Start](./backend/QUICK_START.md) - Local backend setup
 - [Frontend README](./frontend/README.md) - Frontend setup and structure
+- [Environment Configuration](./frontend/ENVIRONMENT.md) - Dev/Prod environment setup
+- [Recommendations API](./backend/RECOMMENDATIONS_API.md) - AI-powered recommendations
 - [Project Summary](./PROJECT_SUMMARY.md) - Complete architecture overview
 - [AI Agent Instructions](./.github/copilot-instructions.md) - For AI coding assistants
 
@@ -118,6 +120,33 @@ After creating the admin user:
 ⚠️ **Change these credentials immediately after first login!**
 
 ## 📝 Environment Configuration
+
+### Quick Setup
+
+**Development** (uses localhost):
+
+```pwsh
+cd frontend
+npm run dev  # Automatically uses http://localhost:5000/api
+```
+
+**Production** (uses server IP):
+
+```pwsh
+cd frontend
+npm run build  # Uses http://65.0.18.1:5000/api (or your configured URL)
+```
+
+### Environment Files
+
+- `.env` - Local default (localhost)
+- `.env.development` - Development mode (localhost)
+- `.env.production` - Production mode (server IP/domain)
+- `.env.example` - Template file
+
+**See [frontend/ENVIRONMENT.md](./frontend/ENVIRONMENT.md) for complete environment configuration guide.**
+
+### Backend Configuration
 
 Copy `.env.example` to `.env` and configure:
 
@@ -133,7 +162,7 @@ MONGO_ROOT_PASSWORD=secure_password
 # CORS
 CORS_ORIGIN=http://localhost:3000
 
-# Frontend API URL
+# Frontend API URL (set in frontend/.env files)
 VITE_API_BASE_URL=http://localhost:5000/api
 ```
 

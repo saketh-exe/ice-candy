@@ -11,6 +11,11 @@ import {
     updateApplicationStatus,
     getAllApplications,
 } from '../controllers/companyController.js';
+import {
+    getRecommendations,
+    getInternshipRecommendations,
+    analyzeApplicant,
+} from '../controllers/recommendationController.js';
 import { protect } from '../middleware/auth.js';
 import { authorize } from '../middleware/roleGuard.js';
 import {
@@ -41,5 +46,10 @@ router.delete('/internships/:id', deleteInternship);
 router.get('/internships/:id/applicants', getApplicants);
 router.get('/applications', getAllApplications);
 router.put('/applications/:id/status', validate(applicationStatusSchema), updateApplicationStatus);
+
+// Recommendation routes
+router.get('/recommendations', getRecommendations);
+router.get('/recommendations/:internshipId', getInternshipRecommendations);
+router.post('/recommendations/analyze', analyzeApplicant);
 
 export default router;
