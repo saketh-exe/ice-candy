@@ -128,16 +128,6 @@ node scripts/createAdmin.js  # Default: admin@skillsync.com / Admin@123
 
 ### Backend `.env` (required)
 
-```
-MONGO_URI=mongodb://localhost:27017/skillsync
-JWT_SECRET=<secure-random-string>
-JWT_REFRESH_SECRET=<different-secure-string>
-JWT_EXPIRE=15m
-JWT_REFRESH_EXPIRE=7d
-PORT=5000
-CORS_ORIGIN=http://localhost:5173
-NODE_ENV=development
-```
 
 ### Frontend `.env` (required)
 

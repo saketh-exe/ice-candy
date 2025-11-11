@@ -24,3 +24,8 @@ logs/
 
 # Docker volumes
 mongodb_data/
+
+# Markdown files (except important ones)
+*.md
+!README.md
+!.github/copilot-instructions.md
