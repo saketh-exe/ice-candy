@@ -1,12 +1,38 @@
 import axios from 'axios';
 
+// Get API base URL from environment variables with proper fallback
+const getApiBaseUrl = () => {
+    const envUrl = import.meta.env.VITE_API_BASE_URL;
+    const mode = import.meta.env.MODE;
+
+    console.log('🌍 Environment Mode:', mode);
+    console.log('🔗 API Base URL from env:', envUrl);
+
+    // Fallback logic based on environment
+    if (envUrl) {
+        return envUrl;
+    }
+
+    // Default fallback for development
+    if (mode === 'development') {
+        console.log('⚠️ Using default development URL');
+        return 'http://localhost:5000/api';
+    }
+
+    // Default fallback for production
+    console.log('⚠️ Using default production URL');
+    return 'http://65.0.18.1:5000/api';
+};
+
 const apiClient = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://65.0.18.1:5000/api',
+    baseURL: getApiBaseUrl(),
     headers: {
         'Content-Type': 'application/json',
     },
     withCredentials: true, // Important for cookies
 });
+
+console.log('🚀 API Client initialized with base URL:', apiClient.defaults.baseURL);
 
 // Helper to get token from Zustand persist storage
 const getAccessToken = () => {

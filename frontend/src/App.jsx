@@ -35,6 +35,8 @@ import CompanyInternshipDetails from "@/pages/company/InternshipDetails";
 import PostInternship from "@/pages/company/PostInternship";
 import CompanyApplications from "@/pages/company/Applications";
 import CompanyApplicationDetails from "@/pages/company/ApplicationDetails";
+import Recommendations from "@/pages/company/Recommendations";
+import InternshipRecommendations from "@/pages/company/InternshipRecommendations";
 
 // Admin Pages
 import AdminDashboard from "@/pages/admin/Dashboard";
@@ -138,6 +140,11 @@ function App() {
           <Route
             path="applications/:id"
             element={<CompanyApplicationDetails />}
+          />
+          <Route path="recommendations" element={<Recommendations />} />
+          <Route
+            path="recommendations/:internshipId"
+            element={<InternshipRecommendations />}
           />
         </Route>
 

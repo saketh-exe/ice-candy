@@ -12,6 +12,11 @@ const CompanyLayout = () => {
     { to: "/company/internships", label: "My Internships", icon: "Briefcase" },
     { to: "/company/internships/new", label: "Post Internship", icon: "Plus" },
     { to: "/company/applications", label: "Applications", icon: "FileText" },
+    {
+      to: "/company/recommendations",
+      label: "AI Recommendations",
+      icon: "TrendingUp",
+    },
   ];
 
   return (

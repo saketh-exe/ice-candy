@@ -69,6 +69,26 @@ const companyService = {
         );
         return response.data;
     },
+
+    // Get recommendations for all internships
+    getRecommendations: async () => {
+        const response = await apiClient.get('/company/recommendations');
+        return response.data;
+    },
+
+    // Get recommendations for specific internship
+    getInternshipRecommendations: async (internshipId) => {
+        const response = await apiClient.get(`/company/recommendations/${internshipId}`);
+        return response.data;
+    },
+
+    // Analyze specific applicant
+    analyzeApplicant: async (applicationId) => {
+        const response = await apiClient.post('/company/recommendations/analyze', {
+            applicationId,
+        });
+        return response.data;
+    },
 };
 
 export default companyService;
