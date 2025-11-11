@@ -22,6 +22,9 @@ jobs:
           script: |
             cd ~/ice-candy
 
+            # Stash any local changes to avoid conflicts
+            git stash
+
             # Pull latest code
             git pull origin main
 
@@ -36,11 +39,9 @@ jobs:
             cd ~/ice-candy/backend
             docker build -t skillsync-backend .
 
-            # Rebuild frontend with hardcoded IP
+            # Rebuild frontend
             cd ~/ice-candy/frontend
-            echo "VITE_API_BASE_URL=http://65.0.18.1:5000/api" > .env
-            docker build --no-cache -t skillsync-frontend .
-            rm .env
+            docker build -t skillsync-frontend .
 
             # Start containers
             cd ~/ice-candy
