@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { useEffect } from "react";
 import { useAuthStore } from "@/store/authStore";
+import { useUIStore } from "@/store/uiStore";
 import Notification from "@/components/common/Notification";
 
 // Layouts
@@ -44,6 +46,16 @@ import AdminInternshipDetails from "@/pages/admin/InternshipDetails";
 
 function App() {
   const { isAuthenticated, user } = useAuthStore();
+  const { theme } = useUIStore();
+
+  // Apply theme on mount and when theme changes
+  useEffect(() => {
+    if (theme === "dark") {
+      document.documentElement.classList.add("dark");
+    } else {
+      document.documentElement.classList.remove("dark");
+    }
+  }, [theme]);
 
   // Redirect authenticated users from home based on role
   const HomeRedirect = () => {

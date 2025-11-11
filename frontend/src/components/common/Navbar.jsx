@@ -3,6 +3,7 @@ import { useAuthStore } from "@/store/authStore";
 import { useUIStore } from "@/store/uiStore";
 import { Menu, X } from "lucide-react";
 import Button from "./Button";
+import ThemeToggle from "./ThemeToggle";
 
 const Navbar = ({ role }) => {
   const { user, logout } = useAuthStore();
@@ -33,6 +34,7 @@ const Navbar = ({ role }) => {
           </div>
 
           <div className="flex items-center gap-4">
+            <ThemeToggle />
             {user ? (
               <>
                 <span className="text-sm text-muted-foreground">
