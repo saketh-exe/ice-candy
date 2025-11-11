@@ -23,6 +23,9 @@ const corsOptions = {
     origin: process.env.CORS_ORIGIN || 'http://localhost:3000',
     credentials: true,
     optionsSuccessStatus: 200,
+    exposedHeaders: ['Content-Range', 'Accept-Ranges', 'Content-Length', 'Content-Disposition'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Range']
 };
 // Middleware
 app.use(cors(corsOptions));
@@ -43,6 +46,11 @@ app.use('/uploads', express.static('uploads'));
 app.get('/api/files/:filename', (req, res) => {
     const filename = req.params.filename;
     const filePath = path.join(__dirname, 'uploads', filename);
+
+    // Add CORS headers explicitly for file downloads
+    res.setHeader('Access-Control-Allow-Origin', process.env.CORS_ORIGIN || 'http://localhost:3000');
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Access-Control-Expose-Headers', 'Content-Range, Accept-Ranges, Content-Length, Content-Disposition');
 
     // Security: Prevent directory traversal
     const normalizedPath = path.normalize(filePath);
