@@ -77,7 +77,7 @@ app.get('/api/files/:filename', (req, res) => {
     if (!fs.existsSync(filePath)) {
         console.log('❌ [FILE DOWNLOAD] File not found');
         console.log('   Searched Path:', filePath);
-        console.log('   Directory Contents:', fs.existsSync(path.join(__dirname, 'uploads')) 
+        console.log('   Directory Contents:', fs.existsSync(path.join(__dirname, 'uploads'))
             ? fs.readdirSync(path.join(__dirname, 'uploads')).slice(0, 5)
             : 'uploads directory does not exist');
         return res.status(404).json({
@@ -116,15 +116,15 @@ app.get('/api/files/:filename', (req, res) => {
         res.setHeader('Content-Length', chunksize);
 
         const stream = fs.createReadStream(filePath, { start, end });
-        
+
         stream.on('open', () => {
             console.log('✅ [FILE DOWNLOAD] Stream opened successfully');
         });
-        
+
         stream.on('error', (err) => {
             console.error('❌ [FILE DOWNLOAD] Stream error:', err.message);
         });
-        
+
         stream.on('end', () => {
             console.log('✅ [FILE DOWNLOAD] Stream ended - Range request completed');
         });
@@ -136,11 +136,11 @@ app.get('/api/files/:filename', (req, res) => {
         console.log('   File Size:', fileSize, 'bytes');
 
         const stream = fs.createReadStream(filePath);
-        
+
         stream.on('open', () => {
             console.log('✅ [FILE DOWNLOAD] Stream opened successfully');
         });
-        
+
         stream.on('error', (err) => {
             console.error('❌ [FILE DOWNLOAD] Stream error:', err.message);
             if (!res.headersSent) {
@@ -150,7 +150,7 @@ app.get('/api/files/:filename', (req, res) => {
                 });
             }
         });
-        
+
         stream.on('end', () => {
             console.log('✅ [FILE DOWNLOAD] Stream ended - Full file sent successfully');
         });
