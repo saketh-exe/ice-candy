@@ -8,7 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -21,30 +21,30 @@ jobs:
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
             cd ~/ice-candy
-            
+
             # Pull latest code
             git pull origin main
-            
+
             # Stop and remove old containers
             docker stop skillsync-backend skillsync-frontend 2>/dev/null || true
             docker rm skillsync-backend skillsync-frontend 2>/dev/null || true
-            
+
             # Remove old images
             docker rmi skillsync-backend skillsync-frontend 2>/dev/null || true
-            
+
             # Rebuild backend
             cd ~/ice-candy/backend
             docker build -t skillsync-backend .
-            
+
             # Rebuild frontend with hardcoded IP
             cd ~/ice-candy/frontend
             echo "VITE_API_BASE_URL=http://65.0.18.1:5000/api" > .env
             docker build --no-cache -t skillsync-frontend .
             rm .env
-            
+
             # Start containers
             cd ~/ice-candy
-            
+
             # Start backend
             docker run -d \
               --name skillsync-backend \
@@ -60,15 +60,15 @@ jobs:
               -e CORS_ORIGIN=http://65.0.18.1:3000 \
               -v $(pwd)/backend/uploads:/app/uploads \
               skillsync-backend
-            
+
             # Start frontend
             docker run -d \
               --name skillsync-frontend \
               --network ice-candy_skillsync-network \
               -p 3000:80 \
               skillsync-frontend
-            
+
             # Check status
             docker ps
-            
+
             echo "Deployment completed successfully!"

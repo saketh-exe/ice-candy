@@ -33,7 +33,7 @@ const Home = () => {
               </>
             ) : (
               <Link to={`/${user?.role}/dashboard`}>
-                <Button size="lg">Go to Dashboard</Button>
+                <Button size="lg">Dashboard</Button>
               </Link>
             )}
           </div>
