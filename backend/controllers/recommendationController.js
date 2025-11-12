@@ -162,6 +162,7 @@ async function processRecommendations(internshipsWithApplicants) {
     return internshipsWithApplicants.map((internship) => {
         const applicants = internship.applications.map((app) => {
             // Calculate recommendation score using matching algorithm
+            console.log("application ", app);
             const scoreData = calculateRecommendationScore({
                 requiredSkills: internship.skills || [],
                 studentSkills: app.student.studentProfile?.skills || [],
@@ -186,7 +187,7 @@ async function processRecommendations(internshipsWithApplicants) {
                 coverLetter: app.coverLetter || null,
                 applicationStatus: app.status,
                 appliedAt: app.createdAt,
-                // AI-powered recommendation score
+       
                 recommendationScore: scoreData.overallScore,
                 matchReason: scoreData.matchReason,
                 skillsMatch: scoreData.skillMatch,

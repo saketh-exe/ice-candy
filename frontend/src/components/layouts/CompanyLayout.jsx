@@ -14,7 +14,7 @@ const CompanyLayout = () => {
     { to: "/company/applications", label: "Applications", icon: "FileText" },
     {
       to: "/company/recommendations",
-      label: "AI Recommendations",
+      label: "Recommendations",
       icon: "TrendingUp",
     },
   ];

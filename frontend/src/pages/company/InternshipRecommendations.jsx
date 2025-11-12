@@ -268,7 +268,7 @@ const InternshipRecommendations = () => {
                     <div className="flex items-center justify-between mb-2">
                       <p className="text-sm font-medium flex items-center gap-2">
                         <TrendingUp size={16} />
-                        AI Recommendation Score
+                        Recommendation Score
                       </p>
                       {applicant.recommendationScore !== null && (
                         <Badge
